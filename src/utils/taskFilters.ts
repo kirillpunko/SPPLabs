@@ -1,20 +1,4 @@
-// @ts-ignore
-export enum TaskStatus {
-  PENDING = 'pending',
-  IN_PROGRESS = 'in_progress',
-  COMPLETED = 'completed',
-  CANCELLED = 'cancelled'
-}
-
-interface BaseTask {
-  id: string;
-  title: string;
-  description: string;
-  status: TaskStatus;
-  dueDate?: Date;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import type {BaseTask, TaskStatus} from "./consts.ts";
 
 export const filterTaskByStatus=<T extends BaseTask>(
   tasks: T[],
