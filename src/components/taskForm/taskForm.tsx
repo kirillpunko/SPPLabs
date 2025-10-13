@@ -13,7 +13,13 @@ type TaskFormType = {
 };
 
 const TaskForm = ({ onSave, onCancel, initialTask = null }:TaskFormType) => {
-  const [task, setTask] = useState<BaseTask|null>(initialTask);
+  const [task, setTask] = useState<BaseTask|null>(initialTask || {
+    id: '',
+    title: '',
+    description: '',
+    assignee: '',
+    status: TaskStatus.TODO
+  });
 
   const handleSubmit = (e:FormEvent) => {
     e.preventDefault();
@@ -76,10 +82,10 @@ const TaskForm = ({ onSave, onCancel, initialTask = null }:TaskFormType) => {
           </div>
 
           <div className={styles["form-actions"]}>
-            <button type="button" onClick={onCancel} className={styles["cancel-btn"]}>
+            <button type="button" onClick={onCancel} className="btn btn-cancel">
               Отмена
             </button>
-            <button type="submit" className={styles["save-btn"]}>
+            <button type="submit" className="btn btn-primary">
               {initialTask ? 'Сохранить' : 'Создать'}
             </button>
           </div>

@@ -8,9 +8,11 @@ type kanbanType = {
   tasks: BaseTask[],
   onTaskUpdate: (taskId:string, task: UpdatedBaseTask ) => void,
   onAddTask: () => void,
+  onDeleteTask?: (taskId: string) => void,
+  onEditTask?: (task: BaseTask) => void,
 }
 
-const KanbanBoard = ({ tasks, onTaskUpdate, onAddTask }:kanbanType) => {
+const KanbanBoard = ({ tasks, onTaskUpdate, onAddTask, onDeleteTask, onEditTask }:kanbanType) => {
   const columns = [
     { id: 'ToDo', title: 'To Do', tasks: filterTaskByStatus(tasks, TaskStatus.TODO) },
     { id: 'in_progress', title: 'In Progress', tasks: filterTaskByStatus(tasks, TaskStatus.IN_PROGRESS) },
@@ -36,7 +38,7 @@ const KanbanBoard = ({ tasks, onTaskUpdate, onAddTask }:kanbanType) => {
     <div className={styles["kanban-board"]}>
       <div className={styles["board-header"]}>
         <h2>Kanban Доска</h2>
-        <button className={styles["add-task-btn"]} onClick={onAddTask}>
+        <button className="btn btn-primary" onClick={onAddTask}>
           + Добавить задачу
         </button>
       </div>
@@ -59,6 +61,8 @@ const KanbanBoard = ({ tasks, onTaskUpdate, onAddTask }:kanbanType) => {
                   key={task.id}
                   task={task}
                   onUpdate={(updates: BaseTask) => onTaskUpdate(task.id, updates)}
+                  onDelete={onDeleteTask ? () => onDeleteTask(task.id) : undefined}
+                  onEdit={onEditTask ? () => onEditTask(task) : undefined}
                 />
               ))}
             </div>

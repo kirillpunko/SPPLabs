@@ -6,3 +6,7 @@ export const generateID = (): UniqID=>{
 
     return `${timestamp}_${random}` as UniqID;
 }
+
+export const generateProjectId = (): number => {
+    return Math.floor(Math.random() * 1000000);
+}

@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import styles from './navigation.module.scss';
 import { navigationItems} from "./consts.ts";
 
 export const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -13,6 +15,10 @@ export const Navigation = () => {
     setIsMenuOpen(false);
   };
 
+  const isActive = (path: string) => {
+    return location.pathname === path;
+  };
+
   return (
     <nav className={styles.navigation}>
 
@@ -20,9 +26,12 @@ export const Navigation = () => {
         <ul className={styles.list}>
           {navigationItems.map((item) => (
             <li key={item.id} className={styles.item}>
-              <a href={item.path} className={styles.link}>
+              <Link 
+                to={item.path} 
+                className={`${styles.link} ${isActive(item.path) ? styles.active : ''}`}
+              >
                 {item.label}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
@@ -45,13 +54,13 @@ export const Navigation = () => {
           <ul className={styles.mobileList}>
             {navigationItems.map((item) => (
               <li key={item.id} className={styles.mobileItem}>
-                <a
-                  href={item.path}
-                  className={styles.mobileLink}
+                <Link
+                  to={item.path}
+                  className={`${styles.mobileLink} ${isActive(item.path) ? styles.active : ''}`}
                   onClick={closeMenu}
                 >
                   {item.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

@@ -2,12 +2,14 @@ import React, {useState} from 'react';
 import styles from'./taskCard.module.scss';
 import {type BaseTask, TaskStatus} from "../../utils/consts.ts";
 
-
 type TaskCardProps = {
    task: BaseTask,
-   onUpdate: (task: BaseTask,) => void,
- }
-const TaskCard = ({ task, onUpdate }:TaskCardProps) => {
+   onUpdate: (task: BaseTask) => void,
+   onDelete?: () => void,
+   onEdit?: () => void,
+}
+
+const TaskCard = ({ task, onUpdate, onDelete, onEdit }:TaskCardProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTask, setEditedTask] = useState(task);
 
@@ -23,6 +25,21 @@ const TaskCard = ({ task, onUpdate }:TaskCardProps) => {
   const handleCancel = () => {
     setEditedTask(task);
     setIsEditing(false);
+  };
+
+  const handleEdit = () => {
+    if (onEdit) {
+      onEdit();
+    } else {
+      setIsEditing(true);
+    }
+  };
+
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onDelete) {
+      onDelete();
+    }
   };
 
   if (isEditing) {
@@ -47,8 +64,8 @@ const TaskCard = ({ task, onUpdate }:TaskCardProps) => {
           placeholder="Исполнитель"
         />
         <div className={styles["edit-actions"]}>
-          <button onClick={handleSave} className={styles["save-btn"]}>Сохранить</button>
-          <button onClick={handleCancel} className={styles["cancel-btn"]}>Отмена</button>
+          <button onClick={handleSave} className="btn btn-success btn-sm">Сохранить</button>
+          <button onClick={handleCancel} className="btn btn-cancel btn-sm">Отмена</button>
         </div>
       </div>
     );
@@ -59,9 +76,20 @@ const TaskCard = ({ task, onUpdate }:TaskCardProps) => {
       className={styles["task-card"]}
       draggable
       onDragStart={handleDragStart}
-      onClick={() => setIsEditing(true)}
+      onClick={handleEdit}
     >
-      <h4 className={styles["task-title"]}>{task.title}</h4>
+      <div className={styles["task-header"]}>
+        <h4 className={styles["task-title"]}>{task.title}</h4>
+        {onDelete && (
+          <button 
+            className="btn btn-danger btn-icon btn-sm" 
+            onClick={handleDelete}
+            title="Удалить задачу"
+          >
+            ×
+          </button>
+        )}
+      </div>
       <p className={styles["task-description"]}>{task.description}</p>
       <div className={styles["task-footer"]}>
         <span className={styles["task-assignee"]}>{task.assignee}</span>

@@ -1,0 +1,220 @@
+// Глобальные стили для кнопок
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 44px; // Минимальная высота для touch-устройств
+  gap: 0.5rem;
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  &:focus {
+    outline: 2px solid rgba(0, 123, 255, 0.5);
+    outline-offset: 2px;
+  }
+}
+
+// Основная кнопка (синяя)
+.btn-primary {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+  
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4);
+    transform: translateY(-1px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+  }
+}
+
+// Вторичная кнопка (серая)
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+  box-shadow: 0 2px 4px rgba(108, 117, 125, 0.3);
+  
+  &:hover:not(:disabled) {
+    background: #5a6268;
+    box-shadow: 0 4px 8px rgba(108, 117, 125, 0.4);
+    transform: translateY(-1px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(108, 117, 125, 0.3);
+  }
+}
+
+// Кнопка отмены (светло-серая)
+.btn-cancel {
+  background: #f8f9fa;
+  color: #6c757d;
+  border: 1px solid #dee2e6;
+  
+  &:hover:not(:disabled) {
+    background: #e9ecef;
+    border-color: #adb5bd;
+    transform: translateY(-1px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Кнопка успеха (зеленая)
+.btn-success {
+  background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+  color: white;
+  box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+  
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, #1e7e34 0%, #155724 100%);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.4);
+    transform: translateY(-1px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+  }
+}
+
+// Кнопка опасности (красная)
+.btn-danger {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: white;
+  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
+  
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.4);
+    transform: translateY(-1px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
+  }
+}
+
+// Маленькая кнопка
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  min-height: 36px;
+}
+
+// Большая кнопка
+.btn-lg {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+  min-height: 52px;
+}
+
+// Кнопка-иконка (круглая)
+.btn-icon {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  min-height: auto;
+  
+  &.btn-sm {
+    width: 36px;
+    height: 36px;
+  }
+  
+  &.btn-lg {
+    width: 52px;
+    height: 52px;
+  }
+}
+
+// Кнопка-ссылка
+.btn-link {
+  background: transparent;
+  color: #007bff;
+  box-shadow: none;
+  text-decoration: underline;
+  
+  &:hover:not(:disabled) {
+    background: rgba(0, 123, 255, 0.1);
+    color: #0056b3;
+    transform: none;
+  }
+  
+  &:active {
+    transform: none;
+  }
+}
+
+// Кнопка с границей
+.btn-outline {
+  background: transparent;
+  border: 2px solid;
+  
+  &.btn-outline-primary {
+    color: #007bff;
+    border-color: #007bff;
+    
+    &:hover:not(:disabled) {
+      background: #007bff;
+      color: white;
+    }
+  }
+  
+  &.btn-outline-secondary {
+    color: #6c757d;
+    border-color: #6c757d;
+    
+    &:hover:not(:disabled) {
+      background: #6c757d;
+      color: white;
+    }
+  }
+  
+  &.btn-outline-danger {
+    color: #dc3545;
+    border-color: #dc3545;
+    
+    &:hover:not(:disabled) {
+      background: #dc3545;
+      color: white;
+    }
+  }
+}
+
+// Адаптивность
+@media (max-width: 768px) {
+  .btn {
+    padding: 0.875rem 1.25rem;
+    font-size: 0.95rem;
+  }
+  
+  .btn-sm {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.8rem;
+  }
+  
+  .btn-lg {
+    padding: 1.125rem 1.75rem;
+    font-size: 1.05rem;
+  }
+}
