@@ -5,7 +5,6 @@ import Task from '../models/Task.js';
 const router = Router();
 
 // GET /api/stats/summary
-// { projects: number, totalTasks: number, doneTasks: number }
 router.get('/summary', async (_req, res) => {
   const [projectsCount, tasksAgg] = await Promise.all([
     Project.countDocuments(),
@@ -20,7 +19,6 @@ router.get('/summary', async (_req, res) => {
 });
 
 // GET /api/stats/projects-overview
-// [{ _id, name, totalTasks, doneTasks }]
 router.get('/projects-overview', async (_req, res) => {
   const projects = await Project.find({}, { name: 1 }).lean();
   const counts = await Task.aggregate([

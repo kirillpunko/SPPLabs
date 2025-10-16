@@ -17,7 +17,6 @@ router.post('/', async (req, res) => {
 // READ all
 router.get('/', async (_req, res) => {
   const projects = await Project.find().lean();
-  // aggregate task counts per project and status
   const counts = await Task.aggregate([
     { $group: { _id: { project: '$project', status: '$status' }, count: { $sum: 1 } } }
   ]);

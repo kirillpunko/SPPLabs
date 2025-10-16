@@ -22,10 +22,6 @@ app.use(cors({
 app.use(express.json());
 app.use(morgan('dev'));
 
-app.get('/api/health', (_req, res) => {
-  res.json({ status: 'ok' });
-});
-
 app.use('/api/projects', projectsRouter);
 app.use('/api/tasks', tasksRouter);
 app.use('/api/stats', statsRouter);
