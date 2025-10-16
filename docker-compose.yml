@@ -3,3 +3,22 @@ services:
     build: .
     ports:
       - "80:80"
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+  backend:
+    build: ./back
+    environment:
+      - PORT=4000
+      - MONGO_URI=mongodb://mongo:27017/labs
+      - CORS_ORIGIN=http://localhost,http://localhost:5173,http://localhost:80,http://localhost:8080
+    depends_on:
+      - mongo
+    ports:
+      - "4000:4000"
+volumes:
+  mongo_data:

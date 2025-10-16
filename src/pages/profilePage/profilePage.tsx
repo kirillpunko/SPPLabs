@@ -1,14 +1,19 @@
 
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../../store';
+import type { AppDispatch } from '../../store';
+import { fetchSummaryThunk, fetchProjectsOverviewThunk } from '../../store';
 import styles from './profilePage.module.scss';
 
 const ProfilePage = () => {
-    const projects = useSelector((state: RootState) => state.app.projects);
-    const totalTasks = projects.reduce((sum, project) => sum + project.tasks.length, 0);
-    const completedTasks = projects.reduce((sum, project) => 
-        sum + project.tasks.filter(task => task.status === 'Done').length, 0
-    );
+    const dispatch = useDispatch<AppDispatch>();
+    const summary = useSelector((state: RootState) => state.app.summary);
+    const overview = useSelector((state: RootState) => state.app.projectsOverview) || [];
+    useEffect(() => {
+        if (!summary) dispatch(fetchSummaryThunk());
+        if (!overview.length) dispatch(fetchProjectsOverviewThunk());
+    }, [dispatch]);
 
     return (
         <div className={styles["profile-page"]}>
@@ -17,51 +22,47 @@ const ProfilePage = () => {
             <div className={styles["profile-stats"]}>
                 <div className={styles["stat-card"]}>
                     <h3>Всего проектов</h3>
-                    <p className={styles["stat-number"]}>{projects.length}</p>
+                    <p className={styles["stat-number"]}>{summary?.projects ?? 0}</p>
                 </div>
                 
                 <div className={styles["stat-card"]}>
                     <h3>Всего задач</h3>
-                    <p className={styles["stat-number"]}>{totalTasks}</p>
+                    <p className={styles["stat-number"]}>{summary?.totalTasks ?? 0}</p>
                 </div>
                 
                 <div className={styles["stat-card"]}>
                     <h3>Выполнено задач</h3>
-                    <p className={styles["stat-number"]}>{completedTasks}</p>
+                    <p className={styles["stat-number"]}>{summary?.doneTasks ?? 0}</p>
                 </div>
                 
                 <div className={styles["stat-card"]}>
                     <h3>Прогресс</h3>
                     <p className={styles["stat-number"]}>
-                        {totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0}%
+                        {summary && summary.totalTasks > 0 ? Math.round((summary.doneTasks / summary.totalTasks) * 100) : 0}%
                     </p>
                 </div>
             </div>
 
             <div className={styles["projects-overview"]}>
                 <h2>Обзор проектов</h2>
-                {projects.length === 0 ? (
+                {overview.length === 0 ? (
                     <p>У вас пока нет проектов</p>
                 ) : (
                     <div className={styles["projects-list"]}>
-                        {projects.map(project => {
-                            const projectCompletedTasks = project.tasks.filter(task => task.status === 'Done').length;
-                            const projectProgress = project.tasks.length > 0 
-                                ? Math.round((projectCompletedTasks / project.tasks.length) * 100) 
-                                : 0;
-                            
+                        {overview.map(p => {
+                            const progress = p.totalTasks > 0 ? Math.round((p.doneTasks / p.totalTasks) * 100) : 0;
                             return (
-                                <div key={project.id} className={styles["project-item"]}>
-                                    <h4>{project.name}</h4>
-                                    <p>Задач: {project.tasks.length}</p>
-                                    <p>Выполнено: {projectCompletedTasks}</p>
+                                <div key={p.id} className={styles["project-item"]}>
+                                    <h4>{p.name}</h4>
+                                    <p>Задач: {p.totalTasks}</p>
+                                    <p>Выполнено: {p.doneTasks}</p>
                                     <div className={styles["progress-bar"]}>
                                         <div 
                                             className={styles["progress-fill"]}
-                                            style={{ width: `${projectProgress}%` }}
+                                            style={{ width: `${progress}%` }}
                                         ></div>
                                     </div>
-                                    <p>Прогресс: {projectProgress}%</p>
+                                    <p>Прогресс: {progress}%</p>
                                 </div>
                             );
                         })}

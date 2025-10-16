@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import TaskForm from '../../components/taskForm/taskForm';
@@ -6,7 +6,7 @@ import './projectPage.module.scss';
 import KanbanBoard from "../../components/canbanBoard/kanbanBoard.tsx";
 import type {BaseTask, UpdatedBaseTask} from "../../utils/consts.ts";
 import type { RootState, AppDispatch } from '../../store';
-import { setCurrentProject, updateTask, addTask, deleteTask } from '../../store';
+import { setCurrentProject, createTask, updateTask, removeTask, fetchTasks } from '../../store';
 import styles from './projectPage.module.scss';
 
 const ProjectPage = () => {
@@ -19,16 +19,21 @@ const ProjectPage = () => {
     const [editingTask, setEditingTask] = useState<BaseTask | null>(null);
 
     useEffect(() => {
-        if (id) {
-            const projectId = parseInt(id);
-            const project = projects.find(p => p.id === projectId);
-            if (project) {
-                dispatch(setCurrentProject(project));
-            } else {
-                navigate('/projects');
-            }
+        if (!id) return;
+        const project = projects.find(p => p.id === id);
+        if (project) {
+            dispatch(setCurrentProject(project));
         }
-    }, [id, projects, dispatch, navigate]);
+    }, [id, projects, dispatch]);
+
+    // fetch tasks once per project id
+    const lastFetchedId = useRef<string | null>(null);
+    useEffect(() => {
+        if (!currentProject) return;
+        if (lastFetchedId.current === currentProject.id) return;
+        lastFetchedId.current = currentProject.id;
+        dispatch(fetchTasks(currentProject.id));
+    }, [currentProject, dispatch]);
 
     const handleAddTask = () => {
         setEditingTask(null);
@@ -50,9 +55,10 @@ const ProjectPage = () => {
                 updates: taskData
             }));
         } else {
-            dispatch(addTask({
+            const { id: _ignore, ...rest } = taskData as any;
+            dispatch(createTask({
                 projectId: currentProject.id,
-                task: taskData
+                task: rest
             }));
         }
 
@@ -72,7 +78,7 @@ const ProjectPage = () => {
     const handleDeleteTask = (taskId: string) => {
         if (!currentProject) return;
         if (window.confirm('Вы уверены, что хотите удалить эту задачу?')) {
-            dispatch(deleteTask({
+            dispatch(removeTask({
                 projectId: currentProject.id,
                 taskId
             }));

@@ -8,7 +8,10 @@ type ProjectCard = {
 }
 
 const ProjectCard = ({ project, onClick }:ProjectCard) => {
-  const totalTasks = project.tasks ? project.tasks.length : 0;
+  const totalTasks = project.totalTasks ?? (project.tasks ? project.tasks.length : 0);
+  const todoCount = project.todoCount;
+  const inProgressCount = project.inProgressCount;
+  const doneCount = project.doneCount;
 
   return (
     <div className={styles["project-card"]} onClick={onClick}>
@@ -19,15 +22,15 @@ const ProjectCard = ({ project, onClick }:ProjectCard) => {
       <div className={styles["project-status"]}>
         <div className={styles["status-item"]}>
           <span className={styles["status-dot todo"]}></span>
-          ToDo: {project.tasks ? filterTaskByStatus(project.tasks, TaskStatus.TODO).length : 0}
+          ToDo: {todoCount ?? (project.tasks ? filterTaskByStatus(project.tasks, TaskStatus.TODO).length : 0)}
         </div>
         <div className={styles["status-item"]}>
           <span className={styles["status-dot in-progress"]}></span>
-          In Progress: {project.tasks ? filterTaskByStatus(project.tasks, TaskStatus.IN_PROGRESS).length : 0}
+          In Progress: {inProgressCount ?? (project.tasks ? filterTaskByStatus(project.tasks, TaskStatus.IN_PROGRESS).length : 0)}
         </div>
         <div className={styles["status-item"]}>
           <span className={styles["status-dot done"]}></span>
-          Done: {project.tasks ? filterTaskByStatus(project.tasks, TaskStatus.DONE).length : 0}
+          Done: {doneCount ?? (project.tasks ? filterTaskByStatus(project.tasks, TaskStatus.DONE).length : 0)}
         </div>
       </div>
     </div>

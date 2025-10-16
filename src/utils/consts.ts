@@ -17,9 +17,13 @@ export interface UpdatedBaseTask {
   updatedAt?: Date;
 }
 export interface Project {
-  id: number;
+  id: string; 
   name: string;
   tasks: BaseTask[]
+  totalTasks?: number;
+  todoCount?: number;
+  inProgressCount?: number;
+  doneCount?: number;
 }
 
 // @ts-ignore

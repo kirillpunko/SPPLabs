@@ -18,9 +18,11 @@
 
 .columns-container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(320px, 1fr));
   gap: 20px;
   height: calc(100vh - 200px);
+  width: 100%;
+  overflow-x: auto;
 }
 
 .kanban-column {

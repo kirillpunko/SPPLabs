@@ -1,13 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import ProjectCard from "../projectCard/projectCard";
 import ProjectForm from "../projectForm/projectForm";
 import styles from'./projectList.module.scss';
-import type {Project} from "../../utils/consts.ts";
 import type { RootState, AppDispatch } from '../../store';
-import { addProject } from '../../store';
-import { generateProjectId } from '../../utils/idGenerator';
+import { createProject, fetchProjects } from '../../store';
 
 const ProjectList = () => {
   const navigate = useNavigate();
@@ -15,7 +13,11 @@ const ProjectList = () => {
   const projects = useSelector((state: RootState) => state.app.projects);
   const [showProjectForm, setShowProjectForm] = useState(false);
 
-  const handleProjectClick = (projectId: number) => {
+  useEffect(() => {
+    dispatch(fetchProjects());
+  }, [dispatch]);
+
+  const handleProjectClick = (projectId: string) => {
     navigate(`/projects/${projectId}`);
   };
 
@@ -24,12 +26,7 @@ const ProjectList = () => {
   };
 
   const handleSaveProject = (projectData: { name: string }) => {
-    const newProject: Project = {
-      id: generateProjectId(),
-      name: projectData.name,
-      tasks: []
-    };
-    dispatch(addProject(newProject));
+    dispatch(createProject({ name: projectData.name }));
     setShowProjectForm(false);
   };
 
